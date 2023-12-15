@@ -28,6 +28,12 @@ class Student implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[ORM\Column]
+    private ?string $password = null;
+
+    #[ORM\Column]
+    private array $roles = [];
+
     #[ORM\Column(length: 255)]
     private ?string $phone = null;
 

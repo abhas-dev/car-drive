@@ -4,6 +4,7 @@ namespace App\Factory;
 
 use App\Entity\Instructor;
 use App\Repository\InstructorRepository;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
@@ -34,7 +35,7 @@ final class InstructorFactory extends ModelFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
+    public function __construct(private readonly UserPasswordHasherInterface $hasher)
     {
         parent::__construct();
     }
@@ -47,10 +48,12 @@ final class InstructorFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            'email' => self::faker()->text(255),
-            'firstname' => self::faker()->text(255),
-            'name' => self::faker()->text(255),
-            'phone' => self::faker()->text(255),
+            'email' => self::faker()->email(),
+            'firstname' => self::faker()->firstName(),
+            'isVerified' => self::faker()->boolean(),
+            'name' => self::faker()->name(),
+            'password' => 'password',
+            'phone' => self::faker()->phoneNumber(),
         ];
     }
 
@@ -60,7 +63,9 @@ final class InstructorFactory extends ModelFactory
     protected function initialize(): self
     {
         return $this
-            // ->afterInstantiate(function(Instructor $instructor): void {})
+             ->afterInstantiate(function(Instructor $instructor): void {
+                $instructor->setPassword($this->hasher->hashPassword($instructor, $instructor->getPassword()));
+             })
         ;
     }
 

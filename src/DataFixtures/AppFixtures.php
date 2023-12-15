@@ -14,6 +14,7 @@ class AppFixtures extends Fixture
     {
         // $product = new Product();
         // $manager->persist($product);
+        StudentFactory::createOne(['email' => 'test@test.fr']);
         StudentFactory::createMany(25);
         InstructorFactory::createMany(3);
         DrivingSessionBookingFactory::createMany(
