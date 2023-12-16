@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DrivingSessionBookingRepository::class)]
 class DrivingSessionBooking
 {
+    const STATUS_BOOKED = 'booked';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

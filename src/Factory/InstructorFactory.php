@@ -52,8 +52,9 @@ final class InstructorFactory extends ModelFactory
             'firstname' => self::faker()->firstName(),
             'isVerified' => self::faker()->boolean(),
             'name' => self::faker()->name(),
-            'password' => 'password',
+            'password' => self::faker()->password(),
             'phone' => self::faker()->phoneNumber(),
+            'roles' => [],
         ];
     }
 
@@ -64,7 +65,7 @@ final class InstructorFactory extends ModelFactory
     {
         return $this
              ->afterInstantiate(function(Instructor $instructor): void {
-                $instructor->setPassword($this->hasher->hashPassword($instructor, $instructor->getPassword()));
+                 $instructor->setPassword($this->hasher->hashPassword($instructor, $instructor->getPassword()));
              })
         ;
     }

@@ -51,9 +51,13 @@ class Instructor implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: DrivingSessionBooking::class)]
     private Collection $lessonReservations;
 
+    #[ORM\OneToMany(mappedBy: 'assignedInstructor', targetEntity: Student::class)]
+    private Collection $students;
+
     public function __construct()
     {
         $this->lessonReservations = new ArrayCollection();
+        $this->students = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,6 +199,36 @@ class Instructor implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Student>
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Student $student): static
+    {
+        if (!$this->students->contains($student)) {
+            $this->students->add($student);
+            $student->setAssignedInstructor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): static
+    {
+        if ($this->students->removeElement($student)) {
+            // set the owning side to null (unless already changed)
+            if ($student->getAssignedInstructor() === $this) {
+                $student->setAssignedInstructor(null);
+            }
+        }
 
         return $this;
     }

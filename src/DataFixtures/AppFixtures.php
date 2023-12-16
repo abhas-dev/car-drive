@@ -16,9 +16,9 @@ class AppFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
         UserFactory::createOne(['email' => 'admin@test.fr', 'password' => 'password', 'roles' => ['ROLE_ADMIN']]);
-        StudentFactory::createOne(['email' => 'test@test.fr']);
-        StudentFactory::createMany(120);
         InstructorFactory::createMany(3);
+        StudentFactory::createOne(['email' => 'test@test.fr', 'assignedInstructor' => InstructorFactory::random()]);
+        StudentFactory::createMany(120, ['assignedInstructor' => InstructorFactory::random()]);
         DrivingSessionBookingFactory::createMany(
             15,
             function () {

@@ -60,6 +60,9 @@ class Student implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?int $credit = null;
 
+    #[ORM\ManyToOne(inversedBy: 'students')]
+    private ?Instructor $assignedInstructor = null;
+
     public function __construct()
     {
         $this->drivingSessionBookings = new ArrayCollection();
@@ -239,6 +242,18 @@ class Student implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCredit(?int $credit): static
     {
         $this->credit = $credit;
+
+        return $this;
+    }
+
+    public function getAssignedInstructor(): ?Instructor
+    {
+        return $this->assignedInstructor;
+    }
+
+    public function setAssignedInstructor(?Instructor $assignedInstructor): static
+    {
+        $this->assignedInstructor = $assignedInstructor;
 
         return $this;
     }

@@ -29,8 +29,8 @@ security:
             lazy: true
             provider: app_users_provider
             form_login:
-                login_path: login
-                check_path: login
+                login_path: app_login
+                check_path: app_login
                 enable_csrf: true
             entry_point: form_login
             login_throttling:

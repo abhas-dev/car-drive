@@ -6,11 +6,13 @@
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
             {{ ux_controller_link_tags() }}
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
             <link rel="stylesheet" href="{{ asset('styles/app.tailwind.css') }}">
         {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
                 {{ importmap('app') }}
             {% endblock %}
         {% endblock %}
