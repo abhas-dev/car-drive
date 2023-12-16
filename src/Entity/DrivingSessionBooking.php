@@ -31,6 +31,9 @@ class DrivingSessionBooking
     #[ORM\JoinColumn(nullable: false)]
     private ?Instructor $instructor = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $coast = 1;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -92,6 +95,18 @@ class DrivingSessionBooking
     public function setInstructor(?Instructor $instructor): static
     {
         $this->instructor = $instructor;
+
+        return $this;
+    }
+
+    public function getCoast(): ?int
+    {
+        return $this->coast;
+    }
+
+    public function setCoast(?int $coast): static
+    {
+        $this->coast = $coast;
 
         return $this;
     }

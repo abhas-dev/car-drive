@@ -57,6 +57,9 @@ class Student implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: DrivingSessionBooking::class)]
     private Collection $drivingSessionBookings;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $credit = null;
+
     public function __construct()
     {
         $this->drivingSessionBookings = new ArrayCollection();
@@ -225,6 +228,18 @@ class Student implements UserInterface, PasswordAuthenticatedUserInterface
     public function agreeTerms(): self
     {
         $this->agreeTermsAt = new \DateTimeImmutable();
+        return $this;
+    }
+
+    public function getCredit(): ?int
+    {
+        return $this->credit;
+    }
+
+    public function setCredit(?int $credit): static
+    {
+        $this->credit = $credit;
+
         return $this;
     }
 }

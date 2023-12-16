@@ -3,7 +3,7 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post" id="form-login">
+<section class="flex items-center justify-center h-screen">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -14,16 +14,47 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Mot de passe</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <div class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
 
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Connexion</h2>
 
-    <button class="btn btn-lg btn-primary" type="submit" formnovalidate>
-        Se connecter
-    </button>
-</form>
+        <form method="post" id="form-login">
+            <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="inputEmail">Email</label>
+                    <input
+                            id="inputEmail"
+                            name="email"
+                            value="{{ last_username }}"
+                            type="email"
+                            autocomplete="email"
+                            required
+                            autofocus
+                            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                    >
+                </div>
+                <div>
+                    <label class="text-gray-700 dark:text-gray-200" for="inputPassword">Mot de passe</label>
+                    <input
+                            id="inputPassword"
+                            type="password"
+                            name="password"
+                            autocomplete="current-password"
+                            required
+                            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button
+                            formnovalidate
+                            class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+                    >
+                        Se connecter
+                    </button>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            </div>
+        </form>
+    </div>
+</section>
 {% endblock %}
