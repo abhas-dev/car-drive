@@ -26,7 +26,7 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
-    #[Route('/register', name: 'app_register')]
+    #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         $student = new Student();
@@ -34,28 +34,29 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
             $student->setPassword(
-                $passwordHasher->hashPassword(
-                    $student,
-                    $form->get('plainPassword')->getData()
-                )
+                $passwordHasher->hashPassword($student,$form->get('plainPassword')->getData())
             );
-//            dd($form->get('name')->getData());
             $student->setName($form->get('name')->getData());
             $student->setFirstname($form->get('firstname')->getData());
             $student->setPhone($form->get('phone')->getData());
             $student->setRegisteredAt(new \DateTimeImmutable());
             $student->setRoles(['ROLE_STUDENT']);
+            if($form->get('agreeTerms')->getData()){
+                $student->agreeTerms();
+            }
             // TODO: set isVerified to false
             $student->setIsVerified(true);
-//            dd($student);
 
 
             $entityManager->persist($student);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
+            $this->addFlash(
+                'success',
+                "Votre compte a bien été enregistré. Veuillez confirmer votre adresse en cliquant sur lien dans le mail reçu."
+            );
+
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $student,
                 (new TemplatedEmail())
                     ->from(new Address('mailer@car-drive.fr', 'Car Drive Bot'))
@@ -70,7 +71,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
-        ]);
+        ], new Response(null, $form->isSubmitted() && !$form->isValid() ? 422 : 200));
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
@@ -81,6 +82,7 @@ class RegistrationController extends AbstractController
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 

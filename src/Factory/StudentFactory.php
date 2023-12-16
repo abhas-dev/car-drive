@@ -55,6 +55,7 @@ final class StudentFactory extends ModelFactory
             'password' => 'password',
             'phone' => self::faker()->phoneNumber(),
             'registeredAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+            'roles' => ['ROLE_STUDENT'],
         ];
     }
 
@@ -66,6 +67,7 @@ final class StudentFactory extends ModelFactory
         return $this
              ->afterInstantiate(function(Student $student): void {
                  $student->setPassword($this->hasher->hashPassword($student, $student->getPassword()));
+                 $student->agreeTerms();
              })
         ;
     }

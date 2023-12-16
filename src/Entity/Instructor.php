@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InstructorRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -20,21 +21,28 @@ class Instructor implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez entrer votre nom')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez entrer votre prénom')]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez entrer votre email')]
+    #[Assert\Email(message: 'Veuillez entrer un email valide')]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Veuillez entrer un mot de passe')]
+    #[Assert\Length(min: 6, minMessage: 'Votre mot de passe doit contenir au moins 6 caractères')]
     private ?string $password = null;
 
     #[ORM\Column]
     private array $roles = [];
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez entrer votre numéro de téléphone')]
     private ?string $phone = null;
 
     #[ORM\Column(type: 'boolean')]
