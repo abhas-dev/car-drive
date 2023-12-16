@@ -35,11 +35,17 @@ class DrivingSessionBookingController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Student $student */
             $student = $this->getUser();
-            $drivingSession->setStudent($student);
-            $drivingSession->setInstructor($student->getAssignedInstructor());
-            $drivingSession->setStatus(DrivingSessionBooking::STATUS_BOOKED);
-            $drivingSession->setDate($form->get('date')->getData());
-            $drivingSession->setTime($form->get('time')->getData());
+            if (!$student->isVerified() && !$student->getCredit()) {
+                $this->addFlash('error', 'Vous n\'avez plus de crédit.');
+                return $this->redirectToRoute('app_home');
+            } else {
+                $drivingSession->setStudent($student);
+                $drivingSession->setInstructor($student->getAssignedInstructor());
+                $drivingSession->setStatus(DrivingSessionBooking::STATUS_BOOKED);
+                $drivingSession->setDate($form->get('date')->getData());
+                $drivingSession->setTime($form->get('time')->getData());
+                $student->setCredit($student->getCredit() - 1);
+            }
 
             try {
                 $this->entityManager->persist($drivingSession);

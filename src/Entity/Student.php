@@ -39,7 +39,7 @@ class Student implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private array $roles = [];
+    private array $roles = ['ROLE_STUDENT'];
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Veuillez entrer votre numéro de téléphone')]

@@ -55,8 +55,8 @@ final class StudentFactory extends ModelFactory
             'password' => 'password',
             'phone' => self::faker()->phoneNumber(),
             'registeredAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
-            'roles' => [],
-            'assignedInstructor' => ''
+            'assignedInstructor' => '',
+            'credit' => self::faker()->numberBetween(0, 10),
         ];
     }
 
