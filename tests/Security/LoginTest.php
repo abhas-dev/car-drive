@@ -76,7 +76,6 @@ class LoginTest extends WebTestCase
         $this->assertRouteSame('app_login');
         $this->assertResponseIsSuccessful();
 
-//        $this->assertSelectorTextContains('data-form-type', 'login');
         $this->assertSelectorTextContains('div.alert.alert-danger', 'Invalid credentials.');
         $client->getCookieJar()->clear();
     }
